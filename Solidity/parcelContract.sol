@@ -1,11 +1,11 @@
-pragma solidity ^0.5.1;
+pragma solidity ^0.5.0;
 
-import "./DougEnabled.sol";
 import "./Ownable.sol";
 import "./Rejector.sol";
 
 contract ParcelContract is Ownable,Rejector {
     
+    bytes32 public version = "1.0";
     address payable public sender;
     address payable public courier;
     address payable public receiver;
@@ -65,7 +65,7 @@ contract ParcelContract is Ownable,Rejector {
     
     constructor
     (
-        address payable initiator, 
+        address payable _owner, 
         address payable _sender, 
         address payable _courier, 
         address payable _receiver,  
@@ -86,7 +86,7 @@ contract ParcelContract is Ownable,Rejector {
         require(isValidLongitudeAndLatitude(_pickupLongitude, _pickupLatitude), "Invalid pickup longitude or latitude");
         require(_accuracyDeliveryAndPickup >= 50 && _accuracyDeliveryAndPickup <= 150, "accuracy of delivery and pickup is not between 50 and 150");
         
-        owner = initiator;
+        owner = _owner;
         sender = _sender;
         courier = _courier;
         receiver = _receiver;
@@ -126,6 +126,31 @@ contract ParcelContract is Ownable,Rejector {
         {
             receiverSigned = true;
             receiverSignedTimeStamp = now;    
+        }
+    }
+    
+    function unsign() public onlyParticipant {
+        require(pickupTimeStamp == 0, "package is already picked up");
+        require(now < pickupStart  || now > pickupEnd, "Cannot unsing in pickup time");
+        
+        
+        if(sender == msg.sender && senderSigned)
+        {
+            sender.transfer(transportCost + platformCost);
+            senderSigned = false;
+            senderSignedTimeStamp = 0;
+            
+            weiLockedBySender = 0;
+        }
+        if(courier == msg.sender && courierSigned)
+        {
+            courierSigned = false;
+            courierSignedTimeStamp = 0;    
+        }
+        if(receiver == msg.sender && receiverSigned)
+        {
+            receiverSigned = false;
+            receiverSignedTimeStamp = 0;    
         }
     }
     
