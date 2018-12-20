@@ -3,7 +3,7 @@ pragma solidity ^0.4.24;
 import "./Ownable.sol";
 import "./Rejector.sol";
 
-contract ParcelContract is Ownable,Rejector {
+contract ParcelContract is Ownable, Rejector {
     
     bytes32 public version = "1.0";
     address public sender;
