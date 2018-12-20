@@ -1,0 +1,727 @@
+/*! HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
+/*
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+/*html,
+button,
+input,
+select,
+textarea {
+  color: #222;
+}
+*/
+
+html {
+  font-size: 1em;
+  line-height: 1.4;
+}
+/*
+ * Remove text-shadow in selection highlight: h5bp.com/i
+ * These selection rule sets have to be separate.
+ * Customize the background color to match your design.
+ */
+::-moz-selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+::selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+/*
+ * A better looking default horizontal rule
+ */
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+/*
+ * Remove the gap between images, videos, audio and canvas and the bottom of
+ * their containers: h5bp.com/i/440
+ */
+audio,
+canvas,
+img,
+video {
+  vertical-align: middle;
+}
+/*
+ * Remove default fieldset styles.
+ */
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+/*
+ * Allow only vertical resizing of textareas.
+ */
+textarea {
+  resize: vertical;
+}
+
+
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body {
+  background: #333333 url(../img/backgroundLight.jpg) no-repeat center bottom fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  font-family: 'Orator Std', sans-serif;
+  font-weight: 300;
+}
+
+/* not used ***
+#loginheader {
+  color:#011936;
+  font-size:14pt;
+  font-family: 'Orator Std', sans-serif;
+}
+*/
+
+
+.registerQ {
+  position: relative;
+  float: right;
+  padding-right: 5px;
+  font-size: 12px;
+  padding-top: 18px;
+}
+
+h3 {
+  font-size: 12px;
+  color: #c1666b;
+  margin-top: 5px;
+  font-family: 'Orator Std', sans-serif;
+}
+
+a:link {
+  color: #48a9a6;
+}
+
+a:visited {
+  color: #48a9a6;
+}
+
+a:hover {
+  color: #c1666b;
+}
+
+
+/* ************* Select options ************** */
+select {
+  font-family: "Orator Std", sans-serif;
+  background-color: #e4dfda;
+  border-color: #48a9a6;
+}
+
+select:focus {
+  background-color: #e4dfda;
+}
+
+
+datetime {
+  font-family: "Orator Std", sans-serif;
+  background-color: #e4dfda;
+  border-color: #48a9a6;
+}
+
+/* ********* De Login form zelf ********/
+
+
+.login-form {
+  margin: 5px auto;
+  /*background: white;*/
+  padding: 4px 0;
+  position: relative;
+  float: right;
+  /*-webkit-box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.125);
+  box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.125);*/
+  height: 5px;
+}
+
+.login-form #form-loading {
+  text-align: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  z-index: 1000;
+  background: #555555;
+}
+.login-form #form-loading i {
+  font-size: 100px;
+}
+.login-form #form-message {
+  text-align: center;
+  color: #555555;
+}
+.login-form .h1 {
+  font-size: 24px;
+  color: #011936;
+  padding: 15px 15px 35px 15px;
+  text-transform: uppercase;
+  text-align: center;
+}
+.login-form .logo {
+  height: auto;
+  max-width: 100%;
+}
+.login-form .group {
+  *zoom: 1;
+  -webkit-transition: all ease .2s;
+  transition: all ease .2s;
+  padding: 10px 0;
+}
+.login-form .group:before,
+.login-form .group:after {
+  content: " ";
+  display: table;
+}
+.login-form .group:after {
+  clear: both;
+}
+.login-form .group > label {
+  padding-left: 15px;
+  padding-top: 5px;
+  color: #555555;
+  font-size: 36px;
+  display: block;
+}
+.login-form .group > label.empty {
+  display: block;
+  height: 1px;
+  padding: 0;
+  margin: 0;
+}
+.login-form .group > div {
+  padding: 0 15px;
+}
+.login-form .group > div.addon-right {
+  position: relative;
+  padding-right: 50px;
+}
+.login-form .group > div.addon-right > i {
+  position: absolute;
+  right: 25px;
+  top: 9px;
+  z-index: 999;
+  color: #555555;
+}
+.login-form .group > div .error-message {
+  font-size: 10px;
+  color: #c1666b;
+  margin-top: 5px;
+  font-family: 'Orator Std', sans-serif;
+}
+.login-form .group.active {
+  background: #F6F6F6;
+  border-left-color: #40C2FF;
+  -webkit-box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.03);
+  box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.03);
+}
+.login-form input[type=submit] {
+  border: none;
+  background: #011936;
+  color: white;
+  font-family: 'Orator Std', sans-serif;
+  padding: 5px 20px;
+  text-transform: uppercase;
+  font-weight: 500;
+  border-radius: 1px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: background ease-in-out .15s;
+  transition: background ease-in-out .15s;
+  cursor:pointer;
+}
+.login-form input[type=submit]:hover {
+  background: #d4b483;
+  color: #011936;
+  border-color: #011936;
+  border-width: thin;
+}
+.login-form {
+  /*width: 320px;*/
+}
+
+.login-form input[type=text] {
+  font-family: 'Orator Std', sans-serif;
+  border-color: #48a9a6;
+  border-top-color: #48a9a6;
+  border-left-color: #48a9a6;
+}
+
+.login-form input[type=text]:focus {
+  background-color: #d4b483 ;
+}
+
+.login-form input[type=password] {
+  font-family: 'Orator Std', sans-serif;
+  border-color: #48a9a6;
+  border-top-color: #48a9a6;
+  border-left-color: #48a9a6;
+}
+
+.login-form input[type=password]:focus {
+  background-color: #d4b483 ;
+}
+
+@media (min-width: 550px) {
+  .login-form {
+    /*width: 520px;*/
+  }
+  .login-form .group > label {
+    float: left;
+    width: 180px;
+  }
+  .login-form .group > div {
+    margin-left: 180px;
+    padding-left: 0;
+  }
+}
+
+/* ***************** Create Parcel Form ***************** */
+
+.createparcel-form input[type=submit] {
+  border: none;
+  background: #011936;
+  color: white;
+  font-family: 'Orator Std', sans-serif;
+  padding: 5px 20px;
+  text-transform: uppercase;
+  font-weight: 500;
+  border-radius: 1px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: background ease-in-out .15s;
+  transition: background ease-in-out .15s;
+  cursor:pointer;
+}
+.createparcel-form input[type=submit]:hover {
+  background: #d4b483;
+  color: #011936;
+  border-color: #011936;
+  border-width: thin;
+}
+.createparcel-form {
+  /*width: 320px;*/
+}
+
+.createparcel-form input[type=text] {
+  font-family: 'Orator Std', sans-serif;
+  border-color: #48a9a6;
+  border-top-color: #48a9a6;
+  border-left-color: #48a9a6;
+}
+
+.createparcel-form input[type=text]:focus {
+  background-color: #d4b483 ;
+}
+
+/* ***************** Registerform ***************** */
+.register-form input[type=submit] {
+  border: none;
+  background: #011936;
+  color: white;
+  font-family: 'Orator Std', sans-serif;
+  padding: 5px 20px;
+  text-transform: uppercase;
+  font-weight: 500;
+  border-radius: 1px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: background ease-in-out .15s;
+  transition: background ease-in-out .15s;
+  cursor:pointer;
+}
+.register-form input[type=submit]:hover {
+  background: #d4b483;
+  color: #011936;
+  border-color: #011936;
+  border-width: thin;
+}
+
+.register-form input[type=text] {
+  font-family: 'Orator Std', sans-serif;
+  border-color: #48a9a6;
+  border-top-color: #48a9a6;
+  border-left-color: #48a9a6;
+  padding: 1px;
+  margin: 1px;
+}
+.register-form input[type=text]:focus {
+  background-color: #d4b483 ;
+}
+
+.register-form input[type=number] {
+  font-family: 'Orator Std', sans-serif;
+  border-color: #48a9a6;
+  border-top-color: #48a9a6;
+  border-left-color: #48a9a6;
+  padding: 1px;
+  margin: 1px;
+}
+.register-form input[type=number]:focus {
+  background-color: #d4b483 ;
+}
+
+.register-form input[type=email] {
+  font-family: 'Orator Std', sans-serif;
+  border-color: #48a9a6;
+  border-top-color: #48a9a6;
+  border-left-color: #48a9a6;
+  padding: 1px;
+  margin: 1px;
+}
+.register-form input[type=email]:focus {
+  background-color: #d4b483 ;
+}
+
+.register-form input[type=password] {
+  font-family: 'Orator Std', sans-serif;
+  border-color: #48a9a6;
+  border-top-color: #48a9a6;
+  border-left-color: #48a9a6;
+  padding: 1px;
+  margin: 1px;
+}
+.register-form input[type=password]:focus {
+  background-color: #d4b483 ;
+}
+
+#street {
+  width: 201px;
+}
+
+#munic {
+  width: 85px;
+}
+
+#housenumber {
+  width: 50px;
+}
+
+/* ******************************************* */
+
+
+.title {
+  color: #011936;
+}
+
+#parceldescr {
+width: 244px;
+margin-top: 5px;
+margin-left: 80px;
+}
+
+#blocktop {
+  position: relative;
+  top: -14px;
+  width: 290px;
+}
+
+#blockbottom {
+  position: relative;
+  top: -32px;
+  left: 80px;
+  width: 290px;
+}
+
+/* ***** Inhoud/content van de site ***** */
+
+
+
+.logo{
+  padding-left:20px;
+  padding-right:20px;
+}
+
+.logoindex{
+  padding-left:20px;
+  padding-right:20px;
+  padding-top: 20px;
+}
+
+.logotekst{
+  position:relative;
+  top:10px;
+  color:#48a9a6;
+  font-size:36pt;
+}
+
+.logotekst2{
+  position:relative;
+  top:-35px;
+  margin-left:245px;
+  color:#d4b483;
+  font-size:20pt;
+  font-family:"myriad pro";
+}
+
+#loginformshizlle{
+  width:350px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+#iconen{
+  float:middle;
+  width:88%;
+  margin-right:50px;
+  text-align:center;
+}
+
+#iconen img{
+  margin:10px;
+}
+
+#footerdeadzone{
+  height:70px;
+  padding:20px;
+  background-color:#48a9a6;
+  font-size:12pt;
+  text-align:center;
+  color:#e4dfda;
+}
+
+#content{
+  font-size:14pt;
+  width:75%;
+  min-height:500px;
+}
+
+#header1{
+font-size: 14pt;
+color: #c1666b;
+font-family: 'Orator Std', sans-serif;;
+}
+
+#normaltext{
+  font-size: 10pt;
+  color: #011936;
+  line-height: 1.7;
+  font-family:'Maiandra GD';
+  font-weight: normal;
+  padding-left: 40px;
+}
+
+/* ++++++++ Index.php specifiek gemaakt ++++++++ */
+
+.contentIndex{
+  width:75%;
+  min-height:75%;
+
+}
+
+#headerIndex {
+  font-size: 14pt;
+  color: #c1666b;
+}
+
+#normaltextIndex {
+  font-size:12pt;
+  color: #011936;
+}
+/*
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ++++++++ Meer opties/mechanics van/voor de form ++++++++ */
+
+
+.form-control {
+  display: block;
+  width: 350px;;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.428571429;
+  color: #555555;
+  background-color: #ffffff;
+  background-image: none;
+  border: 1px solid #cccccc;
+  border-radius: 1px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  font-family:'Maiandra GD';
+}
+.form-control:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.form-control::-moz-placeholder {
+  color: #999999;
+  opacity: 1;
+}
+.form-control:-ms-input-placeholder {
+  color: #999999;
+}
+.form-control::-webkit-input-placeholder {
+  color: #999999;
+}
+.form-control[disabled],
+.form-control[readonly],
+fieldset[disabled] .form-control {
+  cursor: not-allowed;
+  background-color: #eeeeee;
+  opacity: 1;
+}
+textarea.form-control {
+  height: auto;
+}
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+.hide {
+  display: none !important;
+}
+.show {
+  display: block !important;
+}
+.one-line {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.arrow-up {
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-style: none;
+}
+.arrow-down {
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-bottom-style: none;
+}
+.arrow-right {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-right-style: none;
+}
+.arrow-left {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-left-style: none;
+}
+.arrow {
+  width: 0;
+  height: 0;
+  display: inline-block;
+  vertical-align: middle;
+  border-color: white;
+  border-width: 5px;
+  border-style: solid;
+}
+.arrow.up {
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-style: none;
+}
+.arrow.down {
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-bottom-style: none;
+}
+.arrow.right {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-right-style: none;
+}
+.arrow.left {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-left-style: none;
+}
+
+
+
+label.err {
+    color: red;
+    display: block;
+    margin: 0;
+    width: auto;
+}
+em {
+    display: block;
+    margin: 5px 0 0px 180px;
+    font-style: inherit;
+}
+.welcome{
+	line-height: 50px;
+	padding-left:30px;
+	color: #555555;
+}
+
+/* ------------- CHECKBOX lol ------------- */
+.checkboxx {
+  -webkit-appearance: none;
+	background-color: #e4dfda;
+	border: 1px solid #c1666b;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+	padding: 7px;
+	border-radius: 5px;
+	display: inline-block;
+	position: relative;
+  top: 6px;
+}
+
+.checkboxx:active, .regular-checkbox:checked:active {
+	box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+}
+
+.checkboxx:checked {
+	background-color: #e9ecee;
+	border: 1px solid #48a9a6;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
+	color: #99a1a7;
+}
+
+.checkboxx:checked:after {
+	content: '\2714';
+	font-size: 10px;
+	position: absolute;
+	top: 0px;
+	left: 3px;
+	color: #48a9a6;
+}
