@@ -38,7 +38,7 @@ include("auth.php");
  <div class="contentIndex">
 <!--    <div id="header1">  -->
       <p id="normaltextIndex">  Welcome <?php echo $_SESSION['username']; ?>!</p>
-      <p id="headerIndex">      This is the secure area. </p>
+      <p id="headerIndex">      This is the secure area bitchiiizzz. </p>
 
       <p id="normaltextIndex">  NOTICE: DEV-Area: security not implemented! The purpose of this environment purely shows the Proof of Concept, without extended programming.
           You are now a simple user. Create an extended profile in order to become a courier or to send a parcel. 
