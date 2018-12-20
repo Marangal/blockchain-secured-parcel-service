@@ -1,5 +1,5 @@
 pragma solidity ^0.4.24;
-
+s
 import "./Ownable.sol";
 import "./Rejector.sol";
 
