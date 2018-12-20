@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.4.24;
 
 import "./Ownable.sol";
 import "./Rejector.sol";
@@ -6,10 +6,10 @@ import "./Rejector.sol";
 contract ParcelContract is Ownable,Rejector {
     
     bytes32 public version = "1.0";
-    address payable public sender;
-    address payable public courier;
-    address payable public receiver;
-    address payable public platformWallet = address(0xdD870fA1b7C4700F2BD7f44238821C26f7392148);
+    address public sender;
+    address public courier;
+    address public receiver;
+    address public platformWallet = address(0xdD870fA1b7C4700F2BD7f44238821C26f7392148);
     
     uint256 public transportCost = 0;
     uint256 public platformCost = 0;
@@ -65,10 +65,10 @@ contract ParcelContract is Ownable,Rejector {
     
     constructor
     (
-        address payable _owner, 
-        address payable _sender, 
-        address payable _courier, 
-        address payable _receiver,  
+        address _owner, 
+        address _sender, 
+        address _courier, 
+        address _receiver,  
         bytes32 _parcelHash, 
         uint256 _transportCost, 
         uint256 _platformCost, 
