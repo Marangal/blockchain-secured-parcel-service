@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Pete's Pet Shop</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-push-2">
+          <h1 class="text-center">Dinijo - Parcel service</h1>
+          <hr/>
+          <br/>
+        </div>
+      </div>
+    </div>
+
+    <div id="petsRow" class="row">
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="panel panel-default panel-pet">
+          <div class="panel-heading">
+            <h3 class="panel-title">Parcel Contract</h3>
+          </div>
+          <div class="panel-body">
+            <button class="btn btn-default btn-createParcelContract" type="button">Create</button>
+            <label>Address:</label>
+            <input type="text" id="newAddress" value="" /><br />
+            <br /><br />
+            <button class="btn btn-default btn-sign" type="button">Sign</button> |
+            <button class="btn btn-default btn-unsign" type="button">Unsign</button>
+            <br /><br />
+            <button class="btn btn-default btn-pickup" type="button">Pickup</button> |
+            <button class="btn btn-default btn-delivered" type="button">Delivered</button> |
+            <button class="btn btn-default btn-deliveredToSender" type="button">Delivered to sender</button>
+            <br /><br />
+            <button class="btn btn-default btn-readyForPickup" type="button">Ready for pickup</button> |
+            <button class="btn btn-default btn-readyForDelivery" type="button">Ready for delivery</button>
+            <br /><br />
+            <button class="btn btn-default btn-viewDetails" type="button">View</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="panel panel-default panel-pet">
+          <div class="panel-heading">
+            <h3 class="panel-title">Parcel Contract Settings</h3>
+          </div>
+          <div class="panel-body">
+            <label>Courier:</label>
+            <input type="text" id="courier" value="0x14723a09acff6d2a60dcdf7aa4aff308fddc160c" /><br />
+            <label>Receiver:</label>
+            <input type="text" id="receiver" value="0x14723a09acff6d2a60dcdf7aa4aff308fddc160c" /><br />
+            <br />
+            <label>Parcel hash:</label>
+            <input type="text" id="parcelHash" value="0x70617263656c48617368" /><br />
+            <br />
+            <label>Transport cost (Wei):</label>
+            <input type="text" id="transportCost" value="100" /><br />
+            <label>Platform cost (Wei):</label>
+            <input type="text" id="platformCost" value="10" /><br />
+            <br />
+            <label>Pickup longitude:</label>
+            <input type="text" id="pickupLongitude" value="1" /><br />
+            <label>Pickup latitude:</label>
+            <input type="text" id="pickupLatitude" value="1" /><br />
+            <br />
+            <label>Pickup start:</label>
+            <input type="text" id="pickupStart" value="10" /><br />
+            <label>Pickup end:</label>
+            <input type="text" id="pickupEnd" value="20" />   
+            <br />
+            <label>Delivery longitude:</label>
+            <input type="text" id="deliveryLongitude" value="2" /><br />
+            <label>Delivery latitude:</label>
+            <input type="text" id="deliveryLatitude" value="2" /><br />
+            <br />
+            <label>Delivery start:</label>
+            <input type="text" id="deliveryStart" value="30" /><br />
+            <label>Delivery end:</label>
+            <input type="text" id="deliveryEnd" value="40" /><br />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/web3.min.js"></script>
+    <script src="js/truffle-contract.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
