@@ -9,22 +9,22 @@
   ],
   "bytecode": "0x6080604052348015600f57600080fd5b5060c480601d6000396000f30060806040526040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260218152602001807f52656a6563746564206279207468652072656a6563746f7220636f6e7472616381526020017f740000000000000000000000000000000000000000000000000000000000000081525060400191505060405180910390fd00a165627a7a723058204a4ed69ea38f1a7c4383e27ddf75097acfa5b7cd6267469176fd0eb3abfc62670029",
   "deployedBytecode": "0x60806040526040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260218152602001807f52656a6563746564206279207468652072656a6563746f7220636f6e7472616381526020017f740000000000000000000000000000000000000000000000000000000000000081525060400191505060405180910390fd00a165627a7a723058204a4ed69ea38f1a7c4383e27ddf75097acfa5b7cd6267469176fd0eb3abfc62670029",
-  "sourceMap": "28:105:3:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;28:105:3;;;;;;;",
-  "deployedSourceMap": "28:105:3:-;;;84:43;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "sourceMap": "28:105:2:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;28:105:2;;;;;;;",
+  "deployedSourceMap": "28:105:2:-;;;84:43;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
   "source": "pragma solidity ^0.4.24;\r\n\r\ncontract Rejector {\r\n    function() external payable  { revert(\"Rejected by the rejector contract\"); }\r\n}",
   "sourcePath": "C:\\PROJECTS\\blockchain-secured-parcel-service\\Nodejs\\init\\contracts\\Rejector.sol",
   "ast": {
     "absolutePath": "/C/PROJECTS/blockchain-secured-parcel-service/Nodejs/init/contracts/Rejector.sol",
     "exportedSymbols": {
       "Rejector": [
-        953
+        1187
       ]
     },
-    "id": 954,
+    "id": 1188,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 944,
+        "id": 1178,
         "literals": [
           "solidity",
           "^",
@@ -32,7 +32,7 @@
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:3"
+        "src": "0:24:2"
       },
       {
         "baseContracts": [],
@@ -40,18 +40,18 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 953,
+        "id": 1187,
         "linearizedBaseContracts": [
-          953
+          1187
         ],
         "name": "Rejector",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 951,
+              "id": 1185,
               "nodeType": "Block",
-              "src": "82:48:3",
+              "src": "82:48:2",
               "statements": [
                 {
                   "expression": {
@@ -60,14 +60,14 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "52656a6563746564206279207468652072656a6563746f7220636f6e7472616374",
-                        "id": 948,
+                        "id": 1182,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "string",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "91:35:3",
+                        "src": "91:35:2",
                         "subdenomination": null,
                         "typeDescriptions": {
                           "typeIdentifier": "t_stringliteral_ac21a6661184211e49fa6932543de2715c0b9b8f1d079dd12773c4ec96d87eaf",
@@ -83,21 +83,21 @@
                           "typeString": "literal_string \"Rejected by the rejector contract\""
                         }
                       ],
-                      "id": 947,
+                      "id": 1181,
                       "name": "revert",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        973,
-                        974
+                        1207,
+                        1208
                       ],
-                      "referencedDeclaration": 974,
-                      "src": "84:6:3",
+                      "referencedDeclaration": 1208,
+                      "src": "84:6:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_revert_pure$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (string memory) pure"
                       }
                     },
-                    "id": 949,
+                    "id": 1183,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -105,20 +105,20 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "84:43:3",
+                    "src": "84:43:2",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 950,
+                  "id": 1184,
                   "nodeType": "ExpressionStatement",
-                  "src": "84:43:3"
+                  "src": "84:43:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 952,
+            "id": 1186,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -126,43 +126,43 @@
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 945,
+              "id": 1179,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "61:2:3"
+              "src": "61:2:2"
             },
             "payable": true,
             "returnParameters": {
-              "id": 946,
+              "id": 1180,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "82:0:3"
+              "src": "82:0:2"
             },
-            "scope": 953,
-            "src": "53:77:3",
+            "scope": 1187,
+            "src": "53:77:2",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 954,
-        "src": "28:105:3"
+        "scope": 1188,
+        "src": "28:105:2"
       }
     ],
-    "src": "0:133:3"
+    "src": "0:133:2"
   },
   "legacyAST": {
     "absolutePath": "/C/PROJECTS/blockchain-secured-parcel-service/Nodejs/init/contracts/Rejector.sol",
     "exportedSymbols": {
       "Rejector": [
-        953
+        1187
       ]
     },
-    "id": 954,
+    "id": 1188,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 944,
+        "id": 1178,
         "literals": [
           "solidity",
           "^",
@@ -170,7 +170,7 @@
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:3"
+        "src": "0:24:2"
       },
       {
         "baseContracts": [],
@@ -178,18 +178,18 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 953,
+        "id": 1187,
         "linearizedBaseContracts": [
-          953
+          1187
         ],
         "name": "Rejector",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 951,
+              "id": 1185,
               "nodeType": "Block",
-              "src": "82:48:3",
+              "src": "82:48:2",
               "statements": [
                 {
                   "expression": {
@@ -198,14 +198,14 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "52656a6563746564206279207468652072656a6563746f7220636f6e7472616374",
-                        "id": 948,
+                        "id": 1182,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "string",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "91:35:3",
+                        "src": "91:35:2",
                         "subdenomination": null,
                         "typeDescriptions": {
                           "typeIdentifier": "t_stringliteral_ac21a6661184211e49fa6932543de2715c0b9b8f1d079dd12773c4ec96d87eaf",
@@ -221,21 +221,21 @@
                           "typeString": "literal_string \"Rejected by the rejector contract\""
                         }
                       ],
-                      "id": 947,
+                      "id": 1181,
                       "name": "revert",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        973,
-                        974
+                        1207,
+                        1208
                       ],
-                      "referencedDeclaration": 974,
-                      "src": "84:6:3",
+                      "referencedDeclaration": 1208,
+                      "src": "84:6:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_revert_pure$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (string memory) pure"
                       }
                     },
-                    "id": 949,
+                    "id": 1183,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -243,20 +243,20 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "84:43:3",
+                    "src": "84:43:2",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 950,
+                  "id": 1184,
                   "nodeType": "ExpressionStatement",
-                  "src": "84:43:3"
+                  "src": "84:43:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 952,
+            "id": 1186,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -264,30 +264,30 @@
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 945,
+              "id": 1179,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "61:2:3"
+              "src": "61:2:2"
             },
             "payable": true,
             "returnParameters": {
-              "id": 946,
+              "id": 1180,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "82:0:3"
+              "src": "82:0:2"
             },
-            "scope": 953,
-            "src": "53:77:3",
+            "scope": 1187,
+            "src": "53:77:2",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 954,
-        "src": "28:105:3"
+        "scope": 1188,
+        "src": "28:105:2"
       }
     ],
-    "src": "0:133:3"
+    "src": "0:133:2"
   },
   "compiler": {
     "name": "solc",
@@ -302,5 +302,5 @@
     }
   },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-12-20T23:02:24.503Z"
+  "updatedAt": "2018-12-30T14:35:19.841Z"
 }

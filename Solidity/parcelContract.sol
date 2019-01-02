@@ -19,7 +19,7 @@ contract ParcelContract is Ownable, Rejector {
     bytes32 public parcelHash; 
     
     // delivery data
-    bytes32 publicdeliveryAddress;
+    bytes32 public deliveryAddress;
     uint256 public deliveryStart = 0;
     uint256 public deliveryEnd = 0;
     
@@ -39,7 +39,7 @@ contract ParcelContract is Ownable, Rejector {
     
     uint256 public pickupTimeStamp = 0; 
     uint256 public deliveredTimeStamp = 0;
-    uint public deliveredToSenderTimeStamp = 0;
+    uint256 public deliveredToSenderTimeStamp = 0;
     
     uint256 public readyForPickupTimeStampSender = 0;
     int public readyForPickupLongitudeSender = 0;
@@ -221,6 +221,107 @@ contract ParcelContract is Ownable, Rejector {
         }
     }
     
+    function readReadyEvents() public view onlyParticipantAndOwner returns
+    (
+        uint256 _readyForPickupTimeStampSender,
+        int _readyForPickupLongitudeSender,
+        int _readyForPickupLatitudeSender,
+        uint256 _readyForPickupTimeStampCourier,
+        int _readyForPickupLongitudeCourier,
+        int _readyForPickupLatitudeCourier,
+        uint256 _readyForDeliveryTimeStampReceiver,
+        int _readyForDeliveryLongitudeReceiver,
+        int _readyForDeliveryLatitudeReceiver,
+        uint256 _readyForDeliveryTimeStampCourier,
+        int _readyForDeliveryLongitudeCourier,
+        int _readyForDeliveryLatitudeCourier
+    ) {
+        _readyForPickupTimeStampSender = readyForPickupTimeStampSender;
+        _readyForPickupLongitudeSender = readyForPickupLongitudeSender;
+        _readyForPickupLatitudeSender = readyForPickupLatitudeSender;
+        _readyForPickupTimeStampCourier = readyForPickupTimeStampCourier;
+        _readyForPickupLongitudeCourier = readyForPickupLongitudeCourier;
+        _readyForPickupLatitudeCourier = readyForPickupLatitudeCourier;
+        _readyForDeliveryTimeStampReceiver = readyForDeliveryTimeStampReceiver;
+        _readyForDeliveryLongitudeReceiver = readyForDeliveryLongitudeReceiver;
+        _readyForDeliveryLatitudeReceiver = readyForDeliveryLatitudeReceiver;
+        _readyForDeliveryTimeStampCourier = readyForDeliveryTimeStampCourier;
+        _readyForDeliveryLongitudeCourier = readyForDeliveryLongitudeCourier;
+        _readyForDeliveryLatitudeCourier = readyForDeliveryLatitudeCourier;
+    }
+    
+    function readMainEvents() public view onlyParticipantAndOwner returns
+    (
+        bool _senderSigned,
+        uint256 _senderSignedTimeStamp,
+        bool _courierSigned,
+        uint256 _courierSignedTimeStamp,
+        bool _receiverSigned,
+        uint256 _receiverSignedTimeStamp,
+        uint256 _pickupTimeStamp,
+        uint256 _deliveredTimeStamp,
+        uint256 _deliveredToSenderTimeStamp
+    ) {
+        _senderSigned = senderSigned;
+        _senderSignedTimeStamp = senderSignedTimeStamp;
+        _courierSigned = courierSigned;
+        _courierSignedTimeStamp = courierSignedTimeStamp;
+        _receiverSigned = receiverSigned;
+        _receiverSignedTimeStamp = receiverSignedTimeStamp;
+        _pickupTimeStamp = pickupTimeStamp;
+        _deliveredTimeStamp = deliveredTimeStamp;
+        _deliveredToSenderTimeStamp = deliveredToSenderTimeStamp;
+    }
+    
+    function readDetails() public view onlyParticipantAndOwner returns
+    (
+        bytes32 _version,
+        int _accuracyDeliveryAndPickup,
+        uint256 _platformCost,
+        address _sender,
+        address _courier,
+        address _receiver,
+        uint256 _transportCost,
+        uint256 _weiLockedBySender,
+        bytes32 _parcelHash
+    ) {
+        _version = version;
+        _platformCost = platformCost;
+        _accuracyDeliveryAndPickup = accuracyDeliveryAndPickup;
+        _sender = sender;
+        _courier = courier;
+        _receiver = receiver;
+        _transportCost = transportCost;
+        _weiLockedBySender = weiLockedBySender;
+        _parcelHash = parcelHash;
+    }
+    
+    function readPickupAndDeliveryDetails() public view onlyParticipantAndOwner returns
+    (
+        bytes32 _deliveryAddress,
+        uint256 _deliveryStart,
+        uint256 _deliveryEnd,
+        bytes32 _pickupAddress,
+        uint256 _pickupStart,
+        uint256 _pickupEnd,
+        int _deliveryLatitude,
+        int _deliveryLongitude,
+        int _pickupLatitude,
+        int _pickupLongitude
+    ) {
+        _deliveryAddress = deliveryAddress;
+        _deliveryStart = deliveryStart;
+        _deliveryEnd = deliveryEnd;
+        _pickupAddress = pickupAddress;
+        _pickupStart = pickupStart;
+        _pickupEnd = pickupEnd;
+        _deliveryLatitude = deliveryLatitude;
+        _deliveryLongitude = deliveryLongitude;
+        _pickupLatitude = pickupLatitude;
+        _pickupLongitude = pickupLongitude;
+    }
+
+    
     function nearbyPickupOrdDelivery(int pointA, int pointB) private view returns (bool) {
         int result = pointA - pointB;
         if(result < 0)
@@ -260,6 +361,10 @@ contract ParcelContract is Ownable, Rejector {
     
     modifier onlyParticipant() {
         require (msg.sender == courier || msg.sender == receiver || msg.sender == sender, "Only participant allowed");
+        _;
+    }
+    modifier onlyParticipantAndOwner() {
+        require (msg.sender == courier || msg.sender == receiver || msg.sender == sender || msg.sender == owner, "Only participant or owner allowed");
         _;
     }
     modifier onlySignedContract() {

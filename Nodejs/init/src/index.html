@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Pete's Pet Shop</title>
+    <title>Dinijo - Parcel service</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -16,6 +16,18 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <style>
+        /* Set the size of the div element that contains the map */
+        #pickup-map, #delivery-map {
+          height: 400px;  /* The height is 400 pixels */
+          width: 100%;  /* The width is the width of the web page */
+         }
+         body {
+          margin: 15px;
+         }
+      </style>
+      
   </head>
   <body>
     <div class="container">
@@ -27,33 +39,211 @@
         </div>
       </div>
     </div>
-
+    <div class="row">
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <button type="button" class="btn btn-link btn-reset-parcel-data">Reset test data</button>
+      </div>
+    </div>
     <div id="petsRow" class="row">
-      <div class="col-sm-6 col-md-4 col-lg-3">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="panel panel-default panel-pet">
+          <div class="panel-heading">
+            <h3 class="panel-title">Parcels</h3>
+          </div>
+          <div class="panel-body">
+            <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Weight</th>
+                    <th scope="col">Price (Wei)</th>
+                    <th scope="col">Pickup</th>
+                    <th scope="col">Deliver</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td class="parcel-title">Flowers</td>
+                    <td class="parcel-size">Small</td>
+                    <td class="parcel-weight">Light</td>
+                    <td class="parcel-transportCost">100</td>
+                    <td class="parcel-pickupAddress">Gent</td>
+                    <td class="parcel-deliverAddress">Antwerpen</td>
+                    <td>
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                          <button type="button" class="btn btn-link btn-parcel-view">View</button>
+
+                          <button type="button" class="btn btn-link btn-parcel-volunteer">Volunteer as courier</button>
+                        </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>            
+          </div>
+        </div>
+        <hr/>
+      </div>
+    </div>
+    <div id="selectedParcel" class="row collapse">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="panel panel-default panel-pet">
+          <div class="panel-heading">
+            <h3 class="panel-title">Selected</h3>
+          </div>
+          <div class="panel-body">
+              <div class="form-row">
+                  <div class="form-group col-md-4">
+                  <button type="button" class="btn btn-primary btn-save-parcel-data">Save</button>
+                  <button type="button" class="btn btn-primary btn-cancel-parcel-data">Cancel</button>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="parcel-senderName">Sender</label>
+                  <input type="text" class="form-control" disabled id="parcel-senderName" placeholder="your name">
+                </div>
+                <div class="form-group col-md-8">
+                  <label for="parcel-senderPublicKey">Sender public key</label>
+                  <input type="text" class="form-control" disabled id="parcel-senderPublicKey" placeholder="0x....">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="parcel-receiverName">Receiver</label>
+                  <input type="text" class="form-control" id="parcel-receiverName" placeholder="name of receiver">
+                </div>
+                <div class="form-group col-md-8">
+                  <label for="parcel-receiverPublicKey">Receiver public key</label>
+                  <input type="text" class="form-control" id="parcel-receiverPublicKey" placeholder="0x....">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="parcel-courierName">Courier</label>
+                  <input type="text" class="form-control disabled" disabled id="parcel-courierName" placeholder="name of courier">
+                </div>
+                <div class="form-group col-md-8">
+                  <label for="parcel-courierPublicKey">Courier public key</label>
+                  <input type="text" class="form-control" disabled id="parcel-courierPublicKey" placeholder="0x....">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="parcel-title">Title</label>
+                  <input type="text" class="form-control" id="parcel-title" placeholder="Title">
+                </div>
+                <div class="form-group col-md-8">
+                  <label for="parcel-description">Description</label>
+                  <input type="text" class="form-control" id="parcel-description" placeholder="Description">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label class="my-1 mr-2" for="parcel-size">Size</label>
+                    <select class="custom-select my-1 mr-sm-2" id="parcel-size">
+                      <option selected>Choose...</option>
+                      <option value="Small">Small</option>
+                      <option value="Medium">Medium</option>
+                      <option value="Big">Big</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="my-1 mr-2" for="parcel-weight">Weight</label>
+                    <select class="custom-select my-1 mr-sm-2" id="parcel-weight">
+                      <option selected>Choose...</option>
+                      <option value="Light">Light</option>
+                      <option value="Medium">Medium</option>
+                      <option value="Heavy">Heavy</option>
+                    </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="parcel-pickup-city">Pickup city</label>
+                  <input type="text" class="form-control" id="parcel-pickup-city" placeholder="Pickup city">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="parcel-delivery-city">Delivery city</label>
+                  <input type="text" class="form-control" id="parcel-delivery-city" placeholder="Delivery city">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Pickup location</label>
+                  <div id="pickup-map"></div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Delivery location</label>
+                  <div id="delivery-map"></div>
+                </div>
+              </div>
+           </div>
+           <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="parcel-pickupStart">Pickup start</label>
+                <input type="datetime-local" class="form-control" id="parcel-pickupStart">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="parcel-pickupEnd">Pickup end</label>
+                <input type="datetime-local" class="form-control" id="parcel-pickupEnd">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="parcel-deliveryStart">Delivery start</label>
+                <input type="datetime-local" class="form-control" id="parcel-deliveryStart">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="parcel-deliveryEnd">Delivery end</label>
+                <input type="datetime-local" class="form-control" id="parcel-deliveryEnd">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-3">
+                <label for="parcel-transportCost">Transport cost (wei)</label>
+                <input type="text" class="form-control" id="parcel-transportCost" placeholder="0">
+              </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                <button type="button" class="btn btn-primary btn-save-parcel-data">Save</button>
+                <button type="button" class="btn btn-primary btn-cancel-parcel-data">Cancel</button>
+              </div>
+            </div>
+         </div>
+        </div>
+      </div>
+      <hr/>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 col-md-6 col-lg-4">
         <div class="panel panel-default panel-pet">
           <div class="panel-heading">
             <h3 class="panel-title">Parcel Contract</h3>
           </div>
           <div class="panel-body">
-            <button class="btn btn-default btn-createParcelContract" type="button">Create</button>
-            <label>Address:</label>
-            <input type="text" id="newAddress" value="" /><br />
+            <button class="btn btn-primary btn-createParcelContract" type="button">Create</button>
             <br /><br />
-            <button class="btn btn-default btn-sign" type="button">Sign</button> |
+            <button class="btn btn-primary btn-sign" type="button">Sign</button> |
             <button class="btn btn-default btn-unsign" type="button">Unsign</button>
             <br /><br />
-            <button class="btn btn-default btn-pickup" type="button">Pickup</button> |
-            <button class="btn btn-default btn-delivered" type="button">Delivered</button> |
+            <button class="btn btn-primary btn-pickup" type="button">Pickup</button> |
+            <button class="btn btn-primary btn-delivered" type="button">Delivered</button> |
             <button class="btn btn-default btn-deliveredToSender" type="button">Delivered to sender</button>
             <br /><br />
             <button class="btn btn-default btn-readyForPickup" type="button">Ready for pickup</button> |
             <button class="btn btn-default btn-readyForDelivery" type="button">Ready for delivery</button>
             <br /><br />
-            <button class="btn btn-default btn-viewDetails" type="button">View</button>
+            <button class="btn btn-primary btn-viewDetails" type="button">View</button>
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-md-4 col-lg-3">
+      <!--
+      <div class="col-sm-6 col-md-6 col-lg-4">
         <div class="panel panel-default panel-pet">
           <div class="panel-heading">
             <h3 class="panel-title">Parcel Contract Settings</h3>
@@ -94,6 +284,7 @@
           </div>
         </div>
       </div>
+      -->
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -103,5 +294,71 @@
     <script src="js/web3.min.js"></script>
     <script src="js/truffle-contract.js"></script>
     <script src="js/app.js"></script>
+
+    <script>
+      var pickupMarker;
+      var pickupMap;
+      
+      var deliveryMarker;
+      var deliveryMap;
+      var tempDeliveryLocation;
+      var tempPickupLocation;
+
+      function initMap() {
+        var pickupLocation;
+        var deliveryLocation;
+        if(parcel != null && parcel.pickupLocation != null) {
+          pickupLocation = parcel.pickupLocation;
+        } else if(parcel != null && parcel.pickupAddress != null) {
+          pickupLocation = parcel.pickupAddress;
+        } else {
+          pickupLocation = {lat: 51.051990, lng: 3.717397};
+        }
+
+        if(parcel != null && parcel.deliveryLocation != null) {
+          deliveryLocation = parcel.deliveryLocation;
+        } else if(parcel != null && parcel.deliveryAddress != null) {
+          deliveryLocation = parcel.deliveryAddress;
+        } else {
+          deliveryLocation = {lat: 51.051990, lng: 3.717397};
+        }
+
+        pickupMap = new google.maps.Map(document.getElementById('pickup-map'), {
+          zoom: 18, 
+          center: pickupLocation,
+          mapTypeId: 'satellite'
+        });
+        deliveryMap = new google.maps.Map(document.getElementById('delivery-map'), {
+          zoom: 18, 
+          center: deliveryLocation,
+          mapTypeId: 'satellite'
+        });
+           
+        google.maps.event.addListener(pickupMap, 'click', function(event) {
+          tempPickupLocation = {lat: event.latLng.lat(), lng: event.latLng.lng()};
+          if(pickupMarker != null) {
+            pickupMarker.setMap(null);
+          }
+          pickupMarker = new google.maps.Marker({
+            position: event.latLng,
+            map: pickupMap
+          });
+        });
+
+        google.maps.event.addListener(deliveryMap, 'click', function(event) {
+          tempDeliveryLocation = {lat: event.latLng.lat(), lng: event.latLng.lng()};
+          if(deliveryMarker != null) {
+            deliveryMarker.setMap(null);
+          }
+          deliveryMarker = new google.maps.Marker({
+            position: event.latLng,
+            map: deliveryMap
+          });
+        });
+      };
+    </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFXiZbSdxy2iO_WJTybE7fo72UsWeDFsg&callback=initMap">
+    </script>
   </body>
 </html>

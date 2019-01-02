@@ -1,8 +1,22 @@
+const parcelLocalStorageVarName = "parcel";
+var parcel;
+
 App = {
   web3Provider: null,
   contracts: {},
 
   init: async function() {
+    var parcel = App.loadParcelData();
+    App.updateParcelData(parcel);
+
+    /*
+    var editingContractAddress = localStorage.getItem("EditingContractAddress");
+    $("#newAddress").val(editingContractAddress);
+    if($("#newAddress").val() != "") {
+      parcel.smartContract.status.created = true;
+      App.saveParcelData(parcel);
+    }
+*/
     return await App.initWeb3();
   },
 
@@ -25,7 +39,7 @@ App = {
     }
     // If no injected web3 instance is detected, fall back to Ganache
     else {
-      App.web3Provider = new Web3.providers.HttpProvider('http://172.31.27.134:8545');
+      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
     }
     web3 = new Web3(App.web3Provider);
 
@@ -40,69 +54,272 @@ App = {
     
       // Set the provider for our contract
       App.contracts.ParcelContract.setProvider(App.web3Provider);
-
-      // Use our contract to retrieve and mark the adopted pets
-      //return App.markAdopted();
     });
 
     return App.bindEvents();
   },
 
+  saveParcelData: function(parcel) {
+    localStorage.setItem(parcelLocalStorageVarName, JSON.stringify(parcel));
+  },
+
+  removeParcelData: function() {
+    localStorage.removeItem(parcelLocalStorageVarName);
+  },
+  loadParcelData: function() {
+    var parcelData = localStorage.getItem(parcelLocalStorageVarName);
+    if(parcelData == null || parcelData == "undefined")
+    {
+      parcel = {
+        title:"Flowers",
+        description:"A bundle of flowers for someone special.",
+        size:"Small", 
+        weight:"Light",
+        transportCost: 100,
+        platformCost: 10,
+
+        pickupAddress: "Gent",
+        pickupLocation: {lat: 51.051990, lng: 3.717397},
+        pickupStart: new Date().toJSON(),
+        pickupEnd: new Date().toJSON(),
+        
+        deliveryAddress: "Antwerpen",
+        deliveryLocation: {lat: 51.051990, lng: 3.717397},
+        deliveryStart: new Date().toJSON(),
+        deliveryEnd: new Date().toJSON(),
+        
+        senderName: "Jonas",
+        senderPublicKey: "",
+        receiverName: "Dimitri",
+        receiverPublicKey: "",
+        courierName: "Nicolas",
+        courierPublicKey: "",
+        smartContract: {
+          address: "",
+          status : {
+            created: false,
+            senderSigned: false,
+            courierSigned: false,
+            receiverSigned: false,
+            pickup: false,
+            delivered: false
+          }
+        }
+      };
+      localStorage.setItem(parcelLocalStorageVarName, JSON.stringify(parcel));
+
+      web3.eth.getAccounts(function(error, accounts) {
+        var account = accounts[0];
+        parcel.senderPublicKey = account;
+        localStorage.setItem(parcelLocalStorageVarName, JSON.stringify(parcel));
+      });
+    }
+    else {
+      parcel = JSON.parse(localStorage.getItem(parcelLocalStorageVarName));
+    }
+
+    parcel.calculateHash = function() {
+      return web3.sha3(parcel.title, parcel.description, parcel.size, parcel.weight);
+    };
+
+    return parcel;
+  },
+
+  loadParcelForm: function() {
+
+    $("#parcel-senderName").val(parcel.senderName);
+    $("#parcel-senderPublicKey").val(parcel.senderPublicKey);
+    $("#parcel-receiverName").val(parcel.receiverName);
+    $("#parcel-receiverPublicKey").val(parcel.receiverPublicKey);
+    $("#parcel-courierName").val(parcel.courierName);
+    $("#parcel-courierPublicKey").val(parcel.courierPublicKey);
+
+    $("#parcel-title").val(parcel.title);
+    $("#parcel-description").val(parcel.description);
+    $("#parcel-size").val(parcel.size);
+    $("#parcel-weight").val(parcel.weight);
+    $("#parcel-transportCost").val(parcel.transportCost);
+    $("#parcel-pickup-city").val(parcel.pickupAddress);
+    $("#parcel-delivery-city").val(parcel.deliveryAddress);
+    
+    $("#parcel-pickupStart").val(parcel.pickupStart.slice(0,19));
+    $("#parcel-pickupEnd").val(parcel.pickupEnd.slice(0,19));
+    $("#parcel-deliveryStart").val(parcel.deliveryStart.slice(0,19));
+    $("#parcel-deliveryEnd").val(parcel.deliveryEnd.slice(0,19));
+
+    pickupMap.setCenter(parcel.pickupLocation);
+    deliveryMap.setCenter(parcel.deliveryLocation);
+    
+    if(pickupMarker != null) {
+      pickupMarker.setMap(null);
+    }
+    if(deliveryMarker != null) {
+      deliveryMarker.setMap(null);
+    }
+
+    pickupMarker = new google.maps.Marker({
+      position: parcel.pickupLocation,
+      map: pickupMap
+    });
+    deliveryMarker = new google.maps.Marker({
+      position: parcel.deliveryLocation,
+      map: deliveryMap
+    });
+    App.showParcelForm();
+  },
+  removeParcelData: function() {
+    localStorage.removeItem(parcelLocalStorageVarName);
+    location.reload();
+  },
+  saveParcelForm: function() {
+    parcel.senderName = $("#parcel-senderName").val();
+    parcel.senderPublicKey = $("#parcel-senderPublicKey").val();
+    parcel.receiverName = $("#parcel-receiverName").val();
+    parcel.receiverPublicKey = $("#parcel-receiverPublicKey").val();
+
+    parcel.title = $("#parcel-title").val();
+    parcel.description = $("#parcel-description").val();
+    parcel.size = $("#parcel-size").val();
+    parcel.weight = $("#parcel-weight").val();
+    parcel.transportCost = $("#parcel-transportCost").val();
+    parcel.pickupAddress = $("#parcel-pickup-city").val();
+    parcel.deliveryAddress = $("#parcel-delivery-city").val();
+    
+    if(tempDeliveryLocation !== undefined)
+      parcel.deliveryLocation = tempDeliveryLocation;
+    if(tempPickupLocation !== undefined)
+      parcel.pickupLocation = tempPickupLocation;
+
+    parcel.pickupStart = $("#parcel-pickupStart").val();
+    parcel.pickupEnd = $("#parcel-pickupEnd").val();
+    parcel.deliveryStart = $("#parcel-deliveryStart").val();
+    parcel.deliveryEnd = $("#parcel-deliveryEnd").val();
+
+    App.saveParcelData(parcel);
+    location.reload();
+  },
+
+  updateParcelData: function(parcel) {
+    $(".parcel-title").html(parcel.title);
+    $(".parcel-size").html(parcel.size);
+    $(".parcel-weight").html(parcel.weight);
+    $(".parcel-transportCost").html(parcel.transportCost);
+    $(".parcel-pickupAddress").html(parcel.pickupAddress);
+    $(".parcel-deliveryAddress").html(parcel.deliveryAddress);
+  },
+
   bindEvents: function() {
     $(document).on('click', '.btn-createParcelContract', App.createParcelContract);
     $(document).on('click', '.btn-sign', App.signContract);
-    /*$(document).on('click', '.btn-unsign', App.unsign);
-    $(document).on('click', '.btn-pickup', App.pickup);
-    $(document).on('click', '.btn-delivered', App.delivered);
-    $(document).on('click', '.btn-deliveredToSender', App.deliveredToSender);
+    /*$(document).on('click', '.btn-unsign', App.unsign); */
+    $(document).on('click', '.btn-pickup', App.pickupParcel);
+    $(document).on('click', '.btn-delivered', App.deliveredParcel);
+    /*$(document).on('click', '.btn-deliveredToSender', App.deliveredToSender);
     $(document).on('click', '.btn-readyForPickup', App.readyForPickup);
-    $(document).on('click', '.btn-readyForDelivery', App.readyFprDelivery);
+    $(document).on('click', '.btn-readyForDelivery', App.readyForDelivery);*/
     $(document).on('click', '.btn-viewDetails', App.viewDetails);
-    */
+
+    $(document).on('click', '.btn-parcel-volunteer', App.saveCourierToParcel);
+    $(document).on('click', '.btn-parcel-view', App.loadParcelForm);
+    $(document).on('click', '.btn-save-parcel-data', App.saveParcelForm);
+    $(document).on('click', '.btn-reset-parcel-data', App.removeParcelData);
+    $(document).on('click', '.btn-cancel-parcel-data', App.hideParcelForm);
+  },
+
+  activateAction: function() {
+    $(".btn-createParcelContract").attr("disabled", "disabled");
+    $(".btn-sign").attr("disabled", "disabled");
+    $(".btn-pickup").attr("disabled", "disabled");
+    $(".btn-delivered").attr("disabled", "disabled");
+    $(".btn-parcel-volunteer").attr("disabled", "disabled");
+
+    if(parcel.courierPublicKey == "") {
+      $(".btn-parcel-volunteer").removeAttr("disabled");
+    }
+
+    web3.eth.getAccounts(function(error, accounts) {
+      var account = accounts[0].toLowerCase();
+      if(parcel.senderPublicKey.toLowerCase() == account) {
+        if(!parcel.smartContract.status.created) {
+          $(".btn-createParcelContract").removeAttr("disabled");
+        }
+        if(!parcel.smartContract.status.senderSigned && parcel.smartContract.status.created) {
+          $(".btn-sign").removeAttr("disabled");
+        }
+      } 
+      if(parcel.courierPublicKey.toLowerCase() == account) {
+        if(!parcel.smartContract.status.courierSigned && parcel.smartContract.status.created) {
+          $(".btn-sign").removeAttr("disabled");
+        }
+        if(App.allParticipantsSigned() && parcel.smartContract.status.created && !parcel.smartContract.status.pickup) {
+          $(".btn-pickup").removeAttr("disabled");
+        }
+      } 
+      if(parcel.receiverPublicKey.toLowerCase() == account) {
+        if(!parcel.smartContract.status.receiverSigned && parcel.smartContract.status.created) {
+          $(".btn-sign").removeAttr("disabled");
+        }
+        if(App.allParticipantsSigned() && parcel.smartContract.status.created && parcel.smartContract.status.pickup && !parcel.smartContract.status.delivered) {
+          $(".btn-delivered").removeAttr("disabled");
+        }
+      }
+    });
+  },
+
+  allParticipantsSigned: function() {
+    return (parcel.smartContract.status.senderSigned && parcel.smartContract.status.courierSigned && parcel.smartContract.status.receiverSigned)
+  },
+
+  saveCourierToParcel: function() {
+    web3.eth.getAccounts(function(error, accounts) {
+      var account = accounts[0];
+      parcel.courierPublicKey = account;
+      App.saveParcelData(parcel);
+      location.reload();
+    });
+  },
+  showParcelForm: function() {
+    $("#selectedParcel").removeClass("collapse");
+    $("#selectedParcel").addClass("visible");
+  },
+  hideParcelForm: function() {
+    $("#selectedParcel").removeClass("visible");
+    $("#selectedParcel").addClass("collapse");
   },
 
   createParcelContract: function() {
-    
-    var courier = $("#courier").val();
-    var receiver = $("#receiver").val();
-    var parcelHash = $("#parcelHash").val();
-
-    var transportCost = Number($("#transportCost").val());
-    var platformCost = Number($("#platformCost").val());
-
-    var deliveryLongitude = Number($("#deliveryLongitude").val());
-    var deliveryLatitude = Number($("#deliveryLatitude").val());
-    var pickupLongitude = Number($("#pickupLongitude").val());
-    var pickupLatitude = Number($("#pickupLatitude").val());
     var accuracyDeliveryAndPickup = 50;
-    var deliveryStart = Number($("#deliveryStart").val()); 
-    var deliveryEnd = Number($("#deliveryEnd").val()); 
-    var pickupStart = Number($("#pickupStart").val()); 
-    var pickupEnd = Number($("#pickupEnd").val()); 
     
     web3.eth.getAccounts(function(error, accounts) {
       
       var sender = accounts[0];
       var parcelContractInstance;
       App.contracts.ParcelContract.new(
-        sender, 
-        sender, 
-        courier, 
-        receiver, 
-        parcelHash, 
-        transportCost, platformCost, 
-        deliveryLongitude, deliveryLatitude, 
-        pickupLongitude, pickupLatitude, 
-        accuracyDeliveryAndPickup, 
-        deliveryStart, deliveryEnd, 
-        pickupStart, pickupEnd).then(function(instance) {
+        parcel.senderPublicKey, 
+        parcel.senderPublicKey, 
+        parcel.courierPublicKey, 
+        parcel.receiverPublicKey, 
+        parcel.calculateHash(), 
+        Number(parcel.transportCost), 
+        Number(parcel.platformCost),
+        Number(parcel.deliveryLocation.lng * 1000000), // to remove the point.
+        Number(parcel.deliveryLocation.lat * 1000000), // to remove the point.
+        Number(parcel.pickupLocation.lng * 1000000), // to remove the point.
+        Number(parcel.pickupLocation.lat * 1000000), // to remove the point.
+        accuracyDeliveryAndPickup,
+        ((new Date(parcel.deliveryStart)).getTime() * 10000) + 621355968000000000, // ticks
+        ((new Date(parcel.deliveryEnd)).getTime() * 10000) + 621355968000000000, // ticks
+        ((new Date(parcel.pickupStart)).getTime() * 10000) + 621355968000000000, // ticks
+        ((new Date(parcel.pickupEnd)).getTime() * 10000) + 621355968000000000, // ticks
+        ).then(function(instance) {
 
         parcelContractInstance = instance;
-        $("#newAddress").val(parcelContractInstance.address);
+        parcel.smartContract.address = parcelContractInstance.address;
+        parcel.smartContract.status.created = true;
+        App.saveParcelData(parcel);
         console.log("parcelContract instance address:" + parcelContractInstance.address);
-      }).then(function(result) {
-        console.log("result:"+result);
-        console.log("result.logs:" + result.logs);
+
+        location.reload();
       }).catch(function(err) {
         console.log(err.message);
       });
@@ -111,22 +328,101 @@ App = {
 
   signContract: function() {
     
-    var transportCost = Number($("#transportCost").val());
-    var platformCost = Number($("#platformCost").val());
-    var parcelContractAddress = $("#newAddress").val();
+    var transportCost = Number(parcel.transportCost);
+    var platformCost = Number(parcel.platformCost);
+    
+    if(parcel.smartContract.address === "")
+      return;
+
     web3.eth.getAccounts(function(error, accounts) {
       
       var account = accounts[0];
       var parcelContractInstance;
-      App.contracts.ParcelContract.at(parcelContractAddress).then(function(instance) {
+      App.contracts.ParcelContract.at(parcel.smartContract.address).then(function(instance) {
         parcelContractInstance = instance;
-        console.log("parcelContract instance address:" + parcelContractInstance.address);
-        
         return parcelContractInstance.sign({to:parcelContractInstance.address, from: account, value: transportCost + platformCost });
-        //return parcelContractInstance.senderSigned.call();
       }).then(function(result) {
+        if(account == parcel.courierPublicKey) {
+          parcel.smartContract.status.courierSigned = true;
+        }
+        if(account == parcel.senderPublicKey) {
+          parcel.smartContract.status.senderSigned = true;
+        }
+        if(account == parcel.receiverPublicKey) {
+          parcel.smartContract.status.receiverSigned = true;
+        }
+        App.saveParcelData(parcel);
+
         console.log("result:"+result);
         console.log("result.logs:" + result.logs);
+        location.reload();
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
+
+  pickupParcel: function() {
+    if(parcel.smartContract.address === "")
+      return;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      
+      var account = accounts[0];
+      var parcelContractInstance;
+      App.contracts.ParcelContract.at(parcel.smartContract.address).then(function(instance) {
+        parcelContractInstance = instance;
+        return parcelContractInstance.pickup({to:parcelContractInstance.address, from: account});
+      }).then(function(result) {
+        parcel.smartContract.status.pickup = true;
+        App.saveParcelData(parcel);
+
+        console.log("result:"+result);
+        console.log("result.logs:" + result.logs);
+        location.reload();
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
+
+  deliveredParcel: function() {
+    if(parcel.smartContract.address === "")
+      return;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      
+      var account = accounts[0];
+      var parcelContractInstance;
+      App.contracts.ParcelContract.at(parcel.smartContract.address).then(function(instance) {
+        parcelContractInstance = instance;
+        return parcelContractInstance.delivered({to:parcelContractInstance.address, from: account});
+      }).then(function(result) {
+        parcel.smartContract.status.delivered = true;
+        App.saveParcelData(parcel);
+
+        console.log("result:"+result);
+        console.log("result.logs:" + result.logs);
+        location.reload();
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
+
+  viewDetails: function() {
+    if(parcel.smartContract.address === "")
+      return;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      
+      var account = accounts[0];
+      var parcelContractInstance;
+      App.contracts.ParcelContract.at(parcel.smartContract.address).then(function(instance) {
+        parcelContractInstance = instance;
+        return parcelContractInstance.readDetails.call();
+      }).then(function(result) {
+        console.log("result:"+result);
       }).catch(function(err) {
         console.log(err.message);
       });
@@ -134,8 +430,14 @@ App = {
   }
 };
 
+
 $(function() {
+  //var MongoClient = require('mongodb');
+  //import toppo from 'mongodb';
+  
   $(window).load(function() {
     App.init();
+    App.activateAction();
   });
 });
+
