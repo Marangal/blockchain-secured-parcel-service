@@ -122,6 +122,28 @@ App = {
       return web3.sha3(parcel.title, parcel.description, parcel.size, parcel.weight);
     };
 
+    parcel.getStatus = function() {
+      if(parcel.smartContract.status.delivered) {
+        return "Delivered"
+      }
+      if(parcel.smartContract.status.pickup) {
+        return "Picked up"
+      }
+      if(App.allParticipantsSigned()) {
+        return "Signed"
+      }
+      if(parcel.smartContract.status.created) {
+        return "Created"
+      }
+      if(parcel.courierPublicKey != "") {
+        return "Courier ready!"
+      }
+      if(parcel.courierPublicKey == "") {
+        return "waiting for courier"
+      }
+      return ;
+    };
+
     return parcel;
   },
 
@@ -206,6 +228,7 @@ App = {
     $(".parcel-transportCost").html(parcel.transportCost);
     $(".parcel-pickupAddress").html(parcel.pickupAddress);
     $(".parcel-deliveryAddress").html(parcel.deliveryAddress);
+    $(".parcel-status").html(parcel.getStatus());
   },
 
   bindEvents: function() {
@@ -225,7 +248,30 @@ App = {
     $(document).on('click', '.btn-reset-parcel-data', App.removeParcelData);
     $(document).on('click', '.btn-cancel-parcel-data', App.hideParcelForm);
   },
-
+  setUserDetails: function() {
+    web3.eth.getAccounts(function(error, accounts) {
+      var account = accounts[0].toLowerCase();
+      if(account == "") {
+        $(".no-metamask-account").removeClass("collapse");
+        $(".metamask-account").addClass("collapse");
+      } else {
+        $(".no-metamask-account").addClass("collapse");
+        $(".metamask-account").removeClass("collapse");
+        
+        if(account == parcel.senderPublicKey.toLowerCase()) {
+          $(".metamask-account-username").html(parcel.senderName + " as sender");
+        }
+        
+        if(account == parcel.courierPublicKey.toLowerCase()) {
+          $(".metamask-account-username").html(parcel.courierName + " as courier");
+        }
+        
+        if(account == parcel.receiverPublicKey.toLowerCase()) {
+          $(".metamask-account-username").html(parcel.receiverName + " as receiver");
+        }
+      }
+    });
+  },
   activateAction: function() {
     $(".btn-createParcelContract").attr("disabled", "disabled");
     $(".btn-sign").attr("disabled", "disabled");
@@ -330,25 +376,27 @@ App = {
     
     var transportCost = Number(parcel.transportCost);
     var platformCost = Number(parcel.platformCost);
-    
+    var wei = 0;
     if(parcel.smartContract.address === "")
       return;
 
     web3.eth.getAccounts(function(error, accounts) {
       
       var account = accounts[0];
+      if(account == parcel.senderPublicKey.toLowerCase())
+        wei = transportCost + platformCost;
       var parcelContractInstance;
       App.contracts.ParcelContract.at(parcel.smartContract.address).then(function(instance) {
         parcelContractInstance = instance;
-        return parcelContractInstance.sign({to:parcelContractInstance.address, from: account, value: transportCost + platformCost });
+        return parcelContractInstance.sign({to:parcelContractInstance.address, from: account, value: wei });
       }).then(function(result) {
-        if(account == parcel.courierPublicKey) {
+        if(account == parcel.courierPublicKey.toLowerCase()) {
           parcel.smartContract.status.courierSigned = true;
         }
-        if(account == parcel.senderPublicKey) {
+        if(account == parcel.senderPublicKey.toLowerCase()) {
           parcel.smartContract.status.senderSigned = true;
         }
-        if(account == parcel.receiverPublicKey) {
+        if(account == parcel.receiverPublicKey.toLowerCase()) {
           parcel.smartContract.status.receiverSigned = true;
         }
         App.saveParcelData(parcel);
@@ -438,6 +486,7 @@ $(function() {
   $(window).load(function() {
     App.init();
     App.activateAction();
+    App.setUserDetails();
   });
 });
 
