@@ -261,13 +261,15 @@ App = {
         if(account == parcel.senderPublicKey.toLowerCase()) {
           $(".metamask-account-username").html(parcel.senderName + " as sender");
         }
-        
-        if(account == parcel.courierPublicKey.toLowerCase()) {
+        else if(account == parcel.courierPublicKey.toLowerCase()) {
           $(".metamask-account-username").html(parcel.courierName + " as courier");
         }
-        
-        if(account == parcel.receiverPublicKey.toLowerCase()) {
+        else if(account == parcel.receiverPublicKey.toLowerCase()) {
           $(".metamask-account-username").html(parcel.receiverName + " as receiver");
+          return;
+        }
+        else {
+          $(".metamask-account-username").html("unknown user");
         }
       }
     });
