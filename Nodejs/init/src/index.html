@@ -231,7 +231,7 @@
       <div class="col-sm-6 col-md-6 col-lg-4">
         <div class="panel panel-default panel-pet">
           <div class="panel-heading">
-            <h3 class="panel-title">Parcel Contract</h3>
+            <h3 class="panel-title">Actions</h3>
           </div>
           <div class="panel-body">
             <button class="btn btn-primary btn-createParcelContract" type="button">Create</button>
@@ -245,55 +245,173 @@
             <br /><br />
             <button class="btn btn-default btn-readyForPickup" type="button">Ready for pickup</button> |
             <button class="btn btn-default btn-readyForDelivery" type="button">Ready for delivery</button>
-            <br /><br />
-            <button class="btn btn-primary btn-viewDetails" type="button">View</button>
           </div>
         </div>
       </div>
-      <!--
-      <div class="col-sm-6 col-md-6 col-lg-4">
-        <div class="panel panel-default panel-pet">
-          <div class="panel-heading">
-            <h3 class="panel-title">Parcel Contract Settings</h3>
-          </div>
-          <div class="panel-body">
-            <label>Courier:</label>
-            <input type="text" id="courier" value="0x14723a09acff6d2a60dcdf7aa4aff308fddc160c" /><br />
-            <label>Receiver:</label>
-            <input type="text" id="receiver" value="0x14723a09acff6d2a60dcdf7aa4aff308fddc160c" /><br />
-            <br />
-            <label>Parcel hash:</label>
-            <input type="text" id="parcelHash" value="0x70617263656c48617368" /><br />
-            <br />
-            <label>Transport cost (Wei):</label>
-            <input type="text" id="transportCost" value="100" /><br />
-            <label>Platform cost (Wei):</label>
-            <input type="text" id="platformCost" value="10" /><br />
-            <br />
-            <label>Pickup longitude:</label>
-            <input type="text" id="pickupLongitude" value="1" /><br />
-            <label>Pickup latitude:</label>
-            <input type="text" id="pickupLatitude" value="1" /><br />
-            <br />
-            <label>Pickup start:</label>
-            <input type="text" id="pickupStart" value="10" /><br />
-            <label>Pickup end:</label>
-            <input type="text" id="pickupEnd" value="20" />   
-            <br />
-            <label>Delivery longitude:</label>
-            <input type="text" id="deliveryLongitude" value="2" /><br />
-            <label>Delivery latitude:</label>
-            <input type="text" id="deliveryLatitude" value="2" /><br />
-            <br />
-            <label>Delivery start:</label>
-            <input type="text" id="deliveryStart" value="30" /><br />
-            <label>Delivery end:</label>
-            <input type="text" id="deliveryEnd" value="40" /><br />
-          </div>
-        </div>
-      </div>
-      -->
     </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="panel panel-default panel-pet">
+            <div class="panel-heading">
+              <h3 class="panel-title">Blockchain details</h3>
+            </div>
+            <div class="panel-body">
+              <button class="btn btn-primary btn-viewDetails" type="button">View general details</button>
+              <button class="btn btn-primary btn-viewEventsDetails" type="button">View events</button>
+              <button class="btn btn-primary btn-viewPickupDeliveryDetails" type="button">View pickup & delivery Details</button>
+              <div class="blockchain-details collapse">
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                      <p>Version:</p>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-4">
+                      <p><b><span class="blockchain-version"></span></b></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                      <p>Accuracy delivery & pickup:</p>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-4">
+                      <p><b><span class="blockchain-accuracyDeliveryAndPickup"></span></b></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                      <p>Platform cost (wei):</p>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-4">
+                      <p><b><span class="blockchain-platformCost"></span></b></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                      <p>Sender:</p>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-4">
+                      <p><b><span class="blockchain-sender"></span></b></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                      <p>Courier:</p>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-4">
+                      <p><b><span class="blockchain-courier"></span></b></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                      <p>Receiver:</p>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-4">
+                      <p><b><span class="blockchain-receiver"></span></b></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                      <p>Transport cost(wei):</p>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-4">
+                      <p><b><span class="blockchain-transportCost"></span></b></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                      <p>Wei locked by sender:</p>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-4">
+                      <p><b><span class="blockchain-weiLockedBySender"></span></b></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                      <p>Parcel hash:</p>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-4">
+                      <p><b><span class="blockchain-parcelHash"></span></b></p>
+                    </div>
+                </div>
+              </div>
+              
+              <div class="blockchain-events-details collapse">
+                  <div class="row">
+                      <div class="col-sm-3 col-md-3 col-lg-3">
+                        <p>Sender signed:</p>
+                      </div>
+                      <div class="col-sm-6 col-md-6 col-lg-4">
+                        <p><b><span class="blockchain-senderSigned"></span></b></p>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-3 col-md-3 col-lg-3">
+                        <p>SenderSigned timeStamp:</p>
+                      </div>
+                      <div class="col-sm-6 col-md-6 col-lg-4">
+                        <p><b><span class="blockchain-senderSignedTimeStamp"></span></b></p>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-3 col-md-3 col-lg-3">
+                        <p>Courier signed:</p>
+                      </div>
+                      <div class="col-sm-6 col-md-6 col-lg-4">
+                        <p><b><span class="blockchain-courierSigned"></span></b></p>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-3 col-md-3 col-lg-3">
+                        <p>CourierSigned timeStamp:</p>
+                      </div>
+                      <div class="col-sm-6 col-md-6 col-lg-4">
+                        <p><b><span class="blockchain-courierSignedTimeStamp"></span></b></p>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-3 col-md-3 col-lg-3">
+                        <p>Receiver signed:</p>
+                      </div>
+                      <div class="col-sm-6 col-md-6 col-lg-4">
+                        <p><b><span class="blockchain-receiverSigned"></span></b></p>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-3 col-md-3 col-lg-3">
+                        <p>ReceiverSigned timeStamp:</p>
+                      </div>
+                      <div class="col-sm-6 col-md-6 col-lg-4">
+                        <p><b><span class="blockchain-receiverSignedTimeStamp"></span></b></p>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-3 col-md-3 col-lg-3">
+                        <p>Pickup timeStamp:</p>
+                      </div>
+                      <div class="col-sm-6 col-md-6 col-lg-4">
+                        <p><b><span class="blockchain-pickupTimeStamp"></span></b></p>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-3 col-md-3 col-lg-3">
+                        <p>Delivered timeStamp:</p>
+                      </div>
+                      <div class="col-sm-6 col-md-6 col-lg-4">
+                        <p><b><span class="blockchain-deliveredTimeStamp"></span></b></p>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-3 col-md-3 col-lg-3">
+                        <p>Delivered to sender timeStamp:</p>
+                      </div>
+                      <div class="col-sm-6 col-md-6 col-lg-4">
+                        <p><b><span class="blockchain-deliveredToSenderTimeStamp"></span></b></p>
+                      </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

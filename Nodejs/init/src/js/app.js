@@ -241,6 +241,9 @@ App = {
     $(document).on('click', '.btn-readyForPickup', App.readyForPickup);
     $(document).on('click', '.btn-readyForDelivery', App.readyForDelivery);*/
     $(document).on('click', '.btn-viewDetails', App.viewDetails);
+    $(document).on('click', '.btn-viewEventsDetails', App.viewEventsDetails);
+    $(document).on('click', '.btn-viewPickupDeliveryDetails', App.viewDetails);
+    
 
     $(document).on('click', '.btn-parcel-volunteer', App.saveCourierToParcel);
     $(document).on('click', '.btn-parcel-view', App.loadParcelForm);
@@ -355,10 +358,11 @@ App = {
         Number(parcel.pickupLocation.lng * 1000000), // to remove the point.
         Number(parcel.pickupLocation.lat * 1000000), // to remove the point.
         accuracyDeliveryAndPickup,
-        ((new Date(parcel.deliveryStart)).getTime() * 10000) + 621355968000000000, // ticks
-        ((new Date(parcel.deliveryEnd)).getTime() * 10000) + 621355968000000000, // ticks
-        ((new Date(parcel.pickupStart)).getTime() * 10000) + 621355968000000000, // ticks
-        ((new Date(parcel.pickupEnd)).getTime() * 10000) + 621355968000000000, // ticks
+        ((new Date(parcel.deliveryStart)).getTime() / 1000), // seconds
+        ((new Date(parcel.deliveryEnd)).getTime() / 1000), // seconds
+        // ((new Date(parcel.deliveryEnd)).getTime() * 1000) + 621355968000000000, // ticks
+        ((new Date(parcel.pickupStart)).getTime() / 1000), // seconds
+        ((new Date(parcel.pickupEnd)).getTime() / 1000), // seconds
         ).then(function(instance) {
 
         parcelContractInstance = instance;
@@ -472,12 +476,65 @@ App = {
         parcelContractInstance = instance;
         return parcelContractInstance.readDetails.call();
       }).then(function(result) {
+        $(".blockchain-version").html(App.toAscii(result[0]));
+        $(".blockchain-accuracyDeliveryAndPickup").html(Number(result[1]));
+        $(".blockchain-platformCost").html(Number(result[2]));
+        $(".blockchain-sender").html(result[3]);
+        $(".blockchain-courier").html(result[4]);
+        $(".blockchain-receiver").html(result[5]);
+        $(".blockchain-transportCost").html(Number(result[6]));
+        $(".blockchain-weiLockedBySender").html(Number(result[7]));
+        $(".blockchain-parcelHash").html(result[8]);
+        
+
+        $(".blockchain-details").removeClass("collapse");
+        $(".blockchain-details").addClass("visible");
         console.log("result:"+result);
       }).catch(function(err) {
         console.log(err.message);
       });
     });
-  }
+  },
+  viewEventsDetails: function() {
+    if(parcel.smartContract.address === "")
+      return;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      
+      var account = accounts[0];
+      var parcelContractInstance;
+      App.contracts.ParcelContract.at(parcel.smartContract.address).then(function(instance) {
+        parcelContractInstance = instance;
+        return parcelContractInstance.readMainEvents.call();
+      }).then(function(result) {
+
+        $(".blockchain-senderSigned").html(result[0]);
+        $(".blockchain-senderSignedTimeStamp").html(App.secondstoDateTime(result[1]).toLocaleString());
+        $(".blockchain-courierSigned").html(result[2]);
+        $(".blockchain-courierSignedTimeStamp").html(App.secondstoDateTime(result[3]).toLocaleString());
+        $(".blockchain-receiverSigned").html(result[4]);
+        $(".blockchain-receiverSignedTimeStamp").html(App.secondstoDateTime(result[5]).toLocaleString());
+        $(".blockchain-pickupTimeStamp").html(App.secondstoDateTime(result[6]).toLocaleString());
+        $(".blockchain-deliveredTimeStamp").html(App.secondstoDateTime(result[7]).toLocaleString());
+        $(".blockchain-deliveredToSenderTimeStamp").html("");
+        
+
+        $(".blockchain-events-details").removeClass("collapse");
+        $(".blockchain-events-details").addClass("visible");
+        console.log("result:"+result);
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
+  toAscii: function (data) {
+    return web3.toAscii(data).replace(/\0/g, '');
+  },
+  secondstoDateTime: function (secs) {
+    var t = new Date(1970, 0, 1); // Epoch
+    t.setSeconds(secs);
+    return t;
+}
 };
 
 
