@@ -4,19 +4,11 @@ var parcel;
 App = {
   web3Provider: null,
   contracts: {},
+  parcelContractInstance: null,
 
   init: async function() {
     var parcel = App.loadParcelData();
     App.updateParcelData(parcel);
-
-    /*
-    var editingContractAddress = localStorage.getItem("EditingContractAddress");
-    $("#newAddress").val(editingContractAddress);
-    if($("#newAddress").val() != "") {
-      parcel.smartContract.status.created = true;
-      App.saveParcelData(parcel);
-    }
-*/
     return await App.initWeb3();
   },
 
@@ -54,6 +46,14 @@ App = {
     
       // Set the provider for our contract
       App.contracts.ParcelContract.setProvider(App.web3Provider);
+
+      if(parcel.smartContract.address != "") {
+        App.contracts.ParcelContract.at(parcel.smartContract.address).then(function(instance) {
+          App.parcelContractInstance = instance;
+        }).catch(function(err) {
+          console.log(err);
+        });
+      }
     });
 
     return App.bindEvents();
@@ -117,7 +117,6 @@ App = {
     else {
       parcel = JSON.parse(localStorage.getItem(parcelLocalStorageVarName));
     }
-
     parcel.calculateHash = function() {
       return web3.sha3(parcel.title, parcel.description, parcel.size, parcel.weight);
     };
@@ -242,7 +241,7 @@ App = {
     $(document).on('click', '.btn-readyForDelivery', App.readyForDelivery);*/
     $(document).on('click', '.btn-viewDetails', App.viewDetails);
     $(document).on('click', '.btn-viewEventsDetails', App.viewEventsDetails);
-    $(document).on('click', '.btn-viewPickupDeliveryDetails', App.viewDetails);
+    $(document).on('click', '.btn-viewPickupDeliveryDetails', App.viewPickupAndDeliveryDetails);
     
 
     $(document).on('click', '.btn-parcel-volunteer', App.saveCourierToParcel);
@@ -344,7 +343,6 @@ App = {
     web3.eth.getAccounts(function(error, accounts) {
       
       var sender = accounts[0];
-      var parcelContractInstance;
       App.contracts.ParcelContract.new(
         parcel.senderPublicKey, 
         parcel.senderPublicKey, 
@@ -363,13 +361,12 @@ App = {
         // ((new Date(parcel.deliveryEnd)).getTime() * 1000) + 621355968000000000, // ticks
         ((new Date(parcel.pickupStart)).getTime() / 1000), // seconds
         ((new Date(parcel.pickupEnd)).getTime() / 1000), // seconds
-        ).then(function(instance) {
-
-        parcelContractInstance = instance;
-        parcel.smartContract.address = parcelContractInstance.address;
+      ).then(function(instance) {
+        App.parcelContractInstance = instance;
+        parcel.smartContract.address = App.parcelContractInstance.address;
         parcel.smartContract.status.created = true;
         App.saveParcelData(parcel);
-        console.log("parcelContract instance address:" + parcelContractInstance.address);
+        console.log("parcelContract instance address:" + App.parcelContractInstance.address);
 
         location.reload();
       }).catch(function(err) {
@@ -392,10 +389,8 @@ App = {
       if(account == parcel.senderPublicKey.toLowerCase())
         wei = transportCost + platformCost;
       var parcelContractInstance;
-      App.contracts.ParcelContract.at(parcel.smartContract.address).then(function(instance) {
-        parcelContractInstance = instance;
-        return parcelContractInstance.sign({to:parcelContractInstance.address, from: account, value: wei });
-      }).then(function(result) {
+      App.parcelContractInstance.sign({to:App.parcelContractInstance.address, from: account, value: wei })
+      .then(function(result) {
         if(account == parcel.courierPublicKey.toLowerCase()) {
           parcel.smartContract.status.courierSigned = true;
         }
@@ -423,11 +418,8 @@ App = {
     web3.eth.getAccounts(function(error, accounts) {
       
       var account = accounts[0];
-      var parcelContractInstance;
-      App.contracts.ParcelContract.at(parcel.smartContract.address).then(function(instance) {
-        parcelContractInstance = instance;
-        return parcelContractInstance.pickup({to:parcelContractInstance.address, from: account});
-      }).then(function(result) {
+      App.parcelContractInstance.pickup({to:App.parcelContractInstance.address, from: account})
+      .then(function(result) {
         parcel.smartContract.status.pickup = true;
         App.saveParcelData(parcel);
 
@@ -447,11 +439,8 @@ App = {
     web3.eth.getAccounts(function(error, accounts) {
       
       var account = accounts[0];
-      var parcelContractInstance;
-      App.contracts.ParcelContract.at(parcel.smartContract.address).then(function(instance) {
-        parcelContractInstance = instance;
-        return parcelContractInstance.delivered({to:parcelContractInstance.address, from: account});
-      }).then(function(result) {
+      App.parcelContractInstance.delivered({to:App.parcelContractInstance.address, from: account})
+      .then(function(result) {
         parcel.smartContract.status.delivered = true;
         App.saveParcelData(parcel);
 
@@ -470,12 +459,10 @@ App = {
 
     web3.eth.getAccounts(function(error, accounts) {
       
-      var account = accounts[0];
-      var parcelContractInstance;
-      App.contracts.ParcelContract.at(parcel.smartContract.address).then(function(instance) {
-        parcelContractInstance = instance;
-        return parcelContractInstance.readDetails.call();
-      }).then(function(result) {
+      
+      App.parcelContractInstance.readDetails.call()
+      .then(function(result) {
+
         $(".blockchain-version").html(App.toAscii(result[0]));
         $(".blockchain-accuracyDeliveryAndPickup").html(Number(result[1]));
         $(".blockchain-platformCost").html(Number(result[2]));
@@ -486,9 +473,9 @@ App = {
         $(".blockchain-weiLockedBySender").html(Number(result[7]));
         $(".blockchain-parcelHash").html(result[8]);
         
-
+        $(".blockchain-events-details").addClass("collapse");
         $(".blockchain-details").removeClass("collapse");
-        $(".blockchain-details").addClass("visible");
+        $(".blockchain-pickup-delivery-details").addClass("collapse");
         console.log("result:"+result);
       }).catch(function(err) {
         console.log(err.message);
@@ -502,11 +489,8 @@ App = {
     web3.eth.getAccounts(function(error, accounts) {
       
       var account = accounts[0];
-      var parcelContractInstance;
-      App.contracts.ParcelContract.at(parcel.smartContract.address).then(function(instance) {
-        parcelContractInstance = instance;
-        return parcelContractInstance.readMainEvents.call();
-      }).then(function(result) {
+      App.parcelContractInstance.readMainEvents.call()
+      .then(function(result) {
 
         $(".blockchain-senderSigned").html(result[0]);
         $(".blockchain-senderSignedTimeStamp").html(App.secondstoDateTime(result[1]).toLocaleString());
@@ -520,7 +504,37 @@ App = {
         
 
         $(".blockchain-events-details").removeClass("collapse");
-        $(".blockchain-events-details").addClass("visible");
+        $(".blockchain-details").addClass("collapse");
+        $(".blockchain-pickup-delivery-details").addClass("collapse");
+        console.log("result:"+result);
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
+
+  viewPickupAndDeliveryDetails: function() {
+    if(parcel.smartContract.address === "")
+      return;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      
+      var account = accounts[0];
+      App.parcelContractInstance.readPickupAndDeliveryDetails.call().then(function(result) {
+
+        $(".blockchain-deliveryStart").html(App.secondstoDateTime(Number(result[0])).toLocaleString());
+        $(".blockchain-deliveryEnd").html(App.secondstoDateTime(Number(result[1])).toLocaleString());
+        $(".blockchain-pickupStart").html(App.secondstoDateTime(Number(result[2])).toLocaleString());
+        $(".blockchain-pickupEnd").html(App.secondstoDateTime(Number(result[3])).toLocaleString());
+        $(".blockchain-deliveryLatitude").html(Number(result[4]) / 1000000);
+        $(".blockchain-deliveryLongitude").html(Number(result[5]) / 1000000);
+        $(".blockchain-pickupLatitude").html(Number(result[6]) / 1000000);
+        $(".blockchain-pickupLongitude").html(Number(result[7]) / 1000000);
+        
+        $(".blockchain-events-details").addClass("collapse");
+        $(".blockchain-details").addClass("collapse");
+        $(".blockchain-pickup-delivery-details").removeClass("collapse");
+        
         console.log("result:"+result);
       }).catch(function(err) {
         console.log(err.message);
