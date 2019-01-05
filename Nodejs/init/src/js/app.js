@@ -25,7 +25,7 @@ App = {
         console.error("User denied account access")
       }
     }
-    // Legacy dapp browsers.....
+    // Legacy dapp browsers...
     else if (window.web3) {
       App.web3Provider = window.web3.currentProvider;
     }
