@@ -19,14 +19,18 @@ contract ParcelContract is Ownable, Rejector {
     bytes32 public parcelHash; 
     
     // delivery data
-    bytes32 public deliveryAddress;
     uint256 public deliveryStart = 0;
     uint256 public deliveryEnd = 0;
+    int public deliveryLatitude = 0;
+    int public deliveryLongitude = 0;
     
     // pickup data
-    bytes32 public pickupAddress;
     uint256 public pickupStart = 0;
     uint256 public pickupEnd = 0;
+    int public pickupLatitude = 0;
+    int public pickupLongitude = 0;
+
+    int public accuracyDeliveryAndPickup = 0;
     
     bool public senderSigned  = false;
     uint256 public senderSignedTimeStamp = 0;
@@ -56,13 +60,7 @@ contract ParcelContract is Ownable, Rejector {
     uint256 public readyForDeliveryTimeStampCourier = 0;
     int public readyForDeliveryLongitudeCourier = 0;
     int public readyForDeliveryLatitudeCourier = 0;
-    
-    int public accuracyDeliveryAndPickup = 0;
-    int public deliveryLatitude = 0;
-    int public deliveryLongitude = 0;
-    int public pickupLatitude = 0;
-    int public pickupLongitude = 0;
-    
+
     constructor
     (
         address _owner, 
@@ -298,10 +296,8 @@ contract ParcelContract is Ownable, Rejector {
     
     function readPickupAndDeliveryDetails() public view onlyParticipantAndOwner returns
     (
-        bytes32 _deliveryAddress,
         uint256 _deliveryStart,
         uint256 _deliveryEnd,
-        bytes32 _pickupAddress,
         uint256 _pickupStart,
         uint256 _pickupEnd,
         int _deliveryLatitude,
@@ -309,10 +305,8 @@ contract ParcelContract is Ownable, Rejector {
         int _pickupLatitude,
         int _pickupLongitude
     ) {
-        _deliveryAddress = deliveryAddress;
         _deliveryStart = deliveryStart;
         _deliveryEnd = deliveryEnd;
-        _pickupAddress = pickupAddress;
         _pickupStart = pickupStart;
         _pickupEnd = pickupEnd;
         _deliveryLatitude = deliveryLatitude;
