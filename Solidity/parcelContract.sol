@@ -128,8 +128,8 @@ contract ParcelContract is Ownable, Rejector {
     }
     
     function unsign() public onlyParticipant {
-        require(pickupTimeStamp == 0, "package is already picked up");
-        require(now < pickupStart  || now > pickupEnd, "Cannot unsing in pickup time");
+        require(pickupTimeStamp == 0, "Package is already picked up");
+        require(now < pickupStart  || now > pickupEnd, "Cannot unsign in pickup time");
         
         
         if(sender == msg.sender && senderSigned)
@@ -202,8 +202,8 @@ contract ParcelContract is Ownable, Rejector {
     
     function readyForDelivery(int longitude, int latidude) public onlyCourierOrReceiver onlySignedContract {
         require(isValidLongitudeAndLatitude(longitude, latidude), "Invalid longitude or latitude for readyForDelivery function");
-        require(nearbyPickupOrdDelivery(deliveryLongitude, longitude), "Longitude is to far from delivery point");
-        require(nearbyPickupOrdDelivery(deliveryLatitude, latidude), "Latitude is to far from delivery point");
+        require(nearbyPickupOrdDelivery(deliveryLongitude, longitude), "Longitude is too far from delivery point");
+        require(nearbyPickupOrdDelivery(deliveryLatitude, latidude), "Latitude is too far from delivery point");
         
         if(receiver == msg.sender)
         {
@@ -329,27 +329,27 @@ contract ParcelContract is Ownable, Rejector {
     }
     
     modifier onlySender() {
-        require (msg.sender == sender, "only sender allowed!");
+        require (msg.sender == sender, "Only sender allowed!");
         _;
     }
     
     modifier onlyCourier() {
-        require (msg.sender == courier, "only courier allowed!");
+        require (msg.sender == courier, "Only courier allowed!");
         _;
     }
     
     modifier onlyReceiver() {
-        require (msg.sender == receiver, "only reciever allowed!");
+        require (msg.sender == receiver, "Only receiver allowed!");
         _;
     }
     
     modifier onlyCourierOrSender() {
-        require (msg.sender == courier || msg.sender == sender, "only sender or courier allowed!");
+        require (msg.sender == courier || msg.sender == sender, "Only sender or courier allowed!");
         _;
     }
     
     modifier onlyCourierOrReceiver() {
-        require (msg.sender == receiver || msg.sender == sender, "only receiver or courier allowed!");
+        require (msg.sender == receiver || msg.sender == sender, "Only receiver or courier allowed!");
         _;
     }
     
