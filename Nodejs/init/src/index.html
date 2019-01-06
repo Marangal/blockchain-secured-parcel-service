@@ -29,18 +29,27 @@
           margin: 15px;
          }
       </style>
-      
+
   </head>
   <body>
-    <div class="container">
+      <div id="footerdeadzone">
+          DiNiJo Parcel Service - Dashboard
+      </div>
+
+    <!-- LOGO -->
+      <img src="img/Logo.png" class="logoindex"><span class="logotekst">Dinijo </span><br />
+
+    <!-- <div class="container">
       <div class="row">
         <div class="col-xs-12 col-sm-8 col-sm-push-2">
+
           <h1 class="text-center">Dinijo - Parcel service</h1>
           <hr/>
           <br/>
         </div>
       </div>
-    </div>
+    </div> -->
+
     <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
           <p class="collapse no-metamask-account">Please login with Metamask and refresh your browser.</b></p>
@@ -49,7 +58,7 @@
       </div>
     <div class="row">
       <div class="col-sm-6 col-md-6 col-lg-6">
-        <button type="button" class="btn btn-link btn-reset-parcel-data">Reset test data</button>
+        <button type="button" class="btn btn-link btn-reset-parcel-data" >Reset test data</button>
       </div>
     </div>
     <div id="petsRow" class="row">
@@ -62,15 +71,15 @@
             <table class="table">
                 <thead class="thead-light">
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Size</th>
-                    <th scope="col">Weight</th>
-                    <th scope="col">Price (Wei)</th>
-                    <th scope="col">Pickup</th>
-                    <th scope="col">Deliver</th>
-                    <th scope="col">Action</th>
-                    <th scope="col">Status</th>
+                    <th scope="col" style="color:#d4b483">#</th>
+                    <th scope="col"><img src="img/rounded/W_box.png"></th>
+                    <th scope="col"><img src="img/rounded/W_size.png"></th>
+                    <th scope="col"><img src="img/rounded/W_weigth.png"></th>
+                    <th scope="col"><img src="img/rounded/W_money.png"></th>
+                    <th scope="col"><img src="img/rounded/W_courier.png"></th>
+                    <th scope="col"><img src="img/rounded/W_destination.png"></th>
+                    <th scope="col" style="color:#d4b483">Action</th>
+                    <th scope="col" style="color:#d4b483">Status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -92,7 +101,7 @@
                     <td class="parcel-status"></td>
                   </tr>
                 </tbody>
-              </table>            
+              </table>
           </div>
         </div>
         <hr/>
@@ -492,7 +501,7 @@
     <script>
       var pickupMarker;
       var pickupMap;
-      
+
       var deliveryMarker;
       var deliveryMap;
       var tempDeliveryLocation;
@@ -518,16 +527,16 @@
         }
 
         pickupMap = new google.maps.Map(document.getElementById('pickup-map'), {
-          zoom: 18, 
+          zoom: 18,
           center: pickupLocation,
           mapTypeId: 'satellite'
         });
         deliveryMap = new google.maps.Map(document.getElementById('delivery-map'), {
-          zoom: 18, 
+          zoom: 18,
           center: deliveryLocation,
           mapTypeId: 'satellite'
         });
-           
+
         google.maps.event.addListener(pickupMap, 'click', function(event) {
           tempPickupLocation = {lat: event.latLng.lat(), lng: event.latLng.lng()};
           if(pickupMarker != null) {
