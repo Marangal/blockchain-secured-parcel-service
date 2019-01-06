@@ -9,7 +9,7 @@ contract ParcelContract is Ownable, Rejector {
     address public sender;
     address public courier;
     address public receiver;
-    address public platformWallet = address(0xdD870fA1b7C4700F2BD7f44238821C26f7392148);
+    address public platformWallet = address(0x2f19621DCa80D7CCb5fC9eEF427eA2De92596CA8);
     
     uint256 public transportCost = 0;
     uint256 public platformCost = 0;
@@ -172,7 +172,7 @@ contract ParcelContract is Ownable, Rejector {
         platformWallet.transfer(platformCost);
     }
     
-    function deliverdToSender() public onlySender onlySignedContract {
+    function deliveredToSender() public onlySender onlySignedContract {
         require(deliveredTimeStamp == 0, "Cannot be delivered.");
         require (pickupTimeStamp > 0, "Parcel was not picked up.");
         deliveredToSenderTimeStamp = now;
@@ -181,41 +181,41 @@ contract ParcelContract is Ownable, Rejector {
         platformWallet.transfer(platformCost);
     }
     
-    function readyForPickup(int longitude, int latidude) public onlyCourierOrSender onlySignedContract {
-        require(isValidLongitudeAndLatitude(longitude, latidude), "Invalid longitude or latitude for readyForPickup function");
+    function readyForPickup(int longitude, int latitude) public onlyCourierOrSender onlySignedContract {
+        require(isValidLongitudeAndLatitude(longitude, latitude), "Invalid longitude or latitude for readyForPickup function");
         require(nearbyPickupOrdDelivery(pickupLongitude, longitude), "Longitude is to far from pickup point");
-        require(nearbyPickupOrdDelivery(pickupLatitude, latidude), "Latitude is to far from pickup point");
+        require(nearbyPickupOrdDelivery(pickupLatitude, latitude), "Latitude is to far from pickup point");
         
         if(sender == msg.sender)
         {
             readyForPickupTimeStampSender = now;
             readyForPickupLongitudeSender = longitude;
-            readyForPickupLatitudeSender = latidude;
+            readyForPickupLatitudeSender = latitude;
         }
         else if(courier == msg.sender)
         {
             readyForPickupTimeStampCourier = now;
             readyForPickupLongitudeCourier = longitude;
-            readyForPickupLatitudeCourier  = latidude;
+            readyForPickupLatitudeCourier  = latitude;
         }
     }
     
-    function readyForDelivery(int longitude, int latidude) public onlyCourierOrReceiver onlySignedContract {
-        require(isValidLongitudeAndLatitude(longitude, latidude), "Invalid longitude or latitude for readyForDelivery function");
+    function readyForDelivery(int longitude, int latitude) public onlyCourierOrReceiver onlySignedContract {
+        require(isValidLongitudeAndLatitude(longitude, latitude), "Invalid longitude or latitude for readyForDelivery function");
         require(nearbyPickupOrdDelivery(deliveryLongitude, longitude), "Longitude is to far from delivery point");
-        require(nearbyPickupOrdDelivery(deliveryLatitude, latidude), "Latitude is to far from delivery point");
+        require(nearbyPickupOrdDelivery(deliveryLatitude, latitude), "Latitude is to far from delivery point");
         
         if(receiver == msg.sender)
         {
             readyForDeliveryTimeStampReceiver = now;
             readyForDeliveryLongitudeReceiver = longitude;
-            readyForDeliveryLatitudeReceiver = latidude;
+            readyForDeliveryLatitudeReceiver = latitude;
         }
         else if(courier == msg.sender)
         {
             readyForDeliveryTimeStampCourier = now;
             readyForDeliveryLongitudeCourier = longitude;
-            readyForDeliveryLatitudeCourier  = latidude;
+            readyForDeliveryLatitudeCourier  = latitude;
         }
     }
     

@@ -75,8 +75,8 @@ App = {
         description:"A bundle of flowers for someone special.",
         size:"Small", 
         weight:"Light",
-        transportCost: 100,
-        platformCost: 10,
+        transportCost: 200000000000000000,
+        platformCost: 100000000000000000,
 
         pickupAddress: "Gent",
         pickupLocation: {lat: 51.051990, lng: 3.717397},
